@@ -1,11 +1,12 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
-import { Plus, Trash2, CheckCircle2, Circle, RefreshCw, ExternalLink, Send } from "lucide-react";
+import { Plus, Trash2, CheckCircle2, Circle, RefreshCw, ExternalLink, Send, Sun, Moon } from "lucide-react";
 import { api, Event, Bill, MealWeek } from "@/lib/api";
 import EventTypeTag from "@/components/EventTypeTag";
 import AddEventModal from "@/components/AddEventModal";
 import AddBillModal from "@/components/AddBillModal";
 import CalendarView from "@/components/CalendarView";
+import { useTheme } from "@/components/ThemeProvider";
 
 const DAYS = ["monday", "tuesday", "wednesday", "thursday", "friday"] as const;
 const MEMBERS = ["Doug", "Edina", "Doggies", "Baby"] as const;
@@ -34,6 +35,7 @@ function daysUntil(dateStr: string) {
 }
 
 export default function Dashboard() {
+  const { dark, toggle } = useTheme();
   const [events, setEvents] = useState<Event[]>([]);
   const [bills, setBills] = useState<Bill[]>([]);
   const [meals, setMeals] = useState<MealWeek | null>(null);
@@ -126,15 +128,20 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
-      <header className="bg-white/50 backdrop-blur-md border-b border-white/60 sticky top-0 z-10">
+      <header className="bg-white/50 dark:bg-white/5 backdrop-blur-md border-b border-white/60 dark:border-white/10 sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-text-primary">Harper Family</h1>
             <p className="text-sm text-text-secondary">{new Date().toLocaleDateString("en-AU", { weekday: "long", day: "numeric", month: "long" })}</p>
           </div>
-          <button onClick={() => load(true)} disabled={refreshing} className="p-2 rounded-xl hover:bg-white/60 text-text-secondary transition-colors">
-            <RefreshCw size={18} className={refreshing ? "animate-spin" : ""} />
-          </button>
+          <div className="flex items-center gap-1">
+            <button onClick={toggle} className="p-2 rounded-xl hover:bg-white/60 dark:hover:bg-white/10 text-text-secondary transition-colors" aria-label="Toggle theme">
+              {dark ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+            <button onClick={() => load(true)} disabled={refreshing} className="p-2 rounded-xl hover:bg-white/60 dark:hover:bg-white/10 text-text-secondary transition-colors">
+              <RefreshCw size={18} className={refreshing ? "animate-spin" : ""} />
+            </button>
+          </div>
         </div>
         {/* Member tabs */}
         <div className="max-w-5xl mx-auto px-4 pb-3 flex gap-2">
@@ -145,7 +152,7 @@ export default function Dashboard() {
               className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                 calendarMember === member
                   ? "bg-accent text-white"
-                  : "bg-white/60 text-text-secondary hover:bg-white/80"
+                  : "bg-white/60 text-text-secondary hover:bg-white/80 dark:bg-white/10 dark:hover:bg-white/20"
               }`}
             >
               {member}
@@ -175,7 +182,7 @@ export default function Dashboard() {
             ) : (
               <div className="space-y-2">
                 {events.map(event => (
-                  <div key={event.id} className="flex items-center gap-4 p-3 rounded-xl bg-white/50 hover:bg-white/80 transition-colors">
+                  <div key={event.id} className="flex items-center gap-4 p-3 rounded-xl bg-white/50 hover:bg-white/80 dark:bg-white/5 dark:hover:bg-white/10 transition-colors">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="font-medium text-text-primary text-sm">{event.title}</span>
@@ -216,7 +223,7 @@ export default function Dashboard() {
               <div className="space-y-2">
                 {/* Unpaid */}
                 {unpaidBills.map(bill => (
-                  <div key={bill.id} className="flex items-center gap-3 p-3 rounded-xl bg-white/50 hover:bg-white/80 transition-colors">
+                  <div key={bill.id} className="flex items-center gap-3 p-3 rounded-xl bg-white/50 hover:bg-white/80 dark:bg-white/5 dark:hover:bg-white/10 transition-colors">
                     <button onClick={() => toggleBill(bill.id)} className="text-gray-300 hover:text-success transition-colors shrink-0">
                       <Circle size={20} />
                     </button>
@@ -287,7 +294,7 @@ export default function Dashboard() {
                   const meal = meals.meals[day];
                   const isRerolling = rerolling === day;
                   return (
-                    <div key={day} className="rounded-xl bg-violet-50/60 p-3 relative">
+                    <div key={day} className="rounded-xl bg-violet-50/60 dark:bg-violet-950/30 p-3 relative">
                       <div className="flex items-center justify-between mb-2">
                         <p className="text-xs font-semibold uppercase tracking-wide text-text-secondary capitalize">{day}</p>
                         <button

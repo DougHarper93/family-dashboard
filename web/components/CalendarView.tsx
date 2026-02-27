@@ -80,7 +80,7 @@ export default function CalendarView({ member }: Props) {
   return (
     <div className="flex flex-col h-full">
       {/* Month navigation */}
-      <div className="flex items-center justify-between px-4 py-3 bg-white/50 border-b border-white/60">
+      <div className="flex items-center justify-between px-4 py-3 bg-white/50 dark:bg-white/5 border-b border-white/60 dark:border-white/10">
         <button onClick={() => goMonth(-1)} className="p-2 rounded-xl hover:bg-white/60 text-text-secondary transition-colors">
           <ChevronLeft size={20} />
         </button>
@@ -120,7 +120,7 @@ export default function CalendarView({ member }: Props) {
                   onClick={() => setSelectedDate(isSelected ? null : dateKey)}
                   className={`
                     relative flex flex-col items-center rounded-xl p-1.5 min-h-[60px] transition-colors text-left
-                    ${isSelected ? "bg-accent/20 ring-1 ring-accent" : "hover:bg-white/60"}
+                    ${isSelected ? "bg-accent/20 ring-1 ring-accent" : "hover:bg-white/60 dark:hover:bg-white/10"}
                   `}
                 >
                   <span className={`
@@ -158,7 +158,7 @@ export default function CalendarView({ member }: Props) {
               ) : (
                 <div className="space-y-2">
                   {selectedEvents.map(ev => (
-                    <div key={ev.id} className="p-3 rounded-xl bg-white/50">
+                    <div key={ev.id} className="p-3 rounded-xl bg-white/50 dark:bg-white/5">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="font-medium text-text-primary text-sm">{ev.title}</span>
                         <EventTypeTag type={ev.type} />

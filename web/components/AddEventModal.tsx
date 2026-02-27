@@ -37,11 +37,11 @@ export default function AddEventModal({ onClose, onSaved }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 dark:bg-black/60 p-4">
       <div className="w-full max-w-md card">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-lg font-semibold text-text-primary">Add Event</h2>
-          <button onClick={onClose} className="p-1 rounded-lg hover:bg-gray-100">
+          <button onClick={onClose} className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10">
             <X size={18} />
           </button>
         </div>

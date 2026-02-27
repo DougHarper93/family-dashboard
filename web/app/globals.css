@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: #f5f3ff;
+  --surface: #ffffff;
+  --border: #ede9fe;
+  --text-primary: #1e1b4b;
+  --text-secondary: #6b7280;
+  --accent-light: #ede9fe;
+}
+
+.dark {
+  --background: #0f0a1e;
+  --surface: #1a1130;
+  --border: #2d2060;
+  --text-primary: #e9e3ff;
+  --text-secondary: #9ca3af;
+  --accent-light: #2d1b69;
+}
+
 @layer base {
   body {
     @apply text-text-primary;
@@ -9,11 +27,15 @@
     background: linear-gradient(135deg, #fce7f3 0%, #f5f3ff 40%, #ede9fe 70%, #e0e7ff 100%);
     background-attachment: fixed;
   }
+
+  .dark body {
+    background: linear-gradient(135deg, #0f0a1e 0%, #1a0f2e 40%, #0f0a1e 70%, #1a1130 100%);
+  }
 }
 
 @layer components {
   .card {
-    @apply bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-white/60 p-5;
+    @apply bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-white/60 p-5 dark:bg-white/5 dark:border-white/10;
   }
 
   .btn {
@@ -25,11 +47,11 @@
   }
 
   .btn-ghost {
-    @apply btn bg-white/60 text-text-secondary hover:bg-white/90 border border-border;
+    @apply btn bg-white/60 text-text-secondary hover:bg-white/90 border border-border dark:bg-white/10 dark:hover:bg-white/20 dark:border-white/10;
   }
 
   .btn-danger {
-    @apply btn bg-red-50 text-danger hover:bg-red-100;
+    @apply btn bg-red-50 text-danger hover:bg-red-100 dark:bg-red-950/50 dark:hover:bg-red-950;
   }
 
   .type-badge {
@@ -37,7 +59,7 @@
   }
 
   .input {
-    @apply w-full rounded-xl border border-border bg-white/70 px-4 py-3 text-sm text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent;
+    @apply w-full rounded-xl border border-border bg-white/70 px-4 py-3 text-sm text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent dark:bg-white/5 dark:border-white/10 dark:placeholder-white/30;
   }
 
   .label {
