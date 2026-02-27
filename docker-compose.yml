@@ -1,0 +1,62 @@
+services:
+  db:
+    image: postgres:16
+    container_name: family-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes:
+      - family-db-data:/var/lib/postgresql/data
+    networks:
+      - family-net
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: family-api
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+    ports:
+      - "8002:8000"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      NTFY_TOPIC: ${NTFY_TOPIC}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+    volumes:
+      - /home/doug/meal-planner/recipes.db:/app/data/recipes.db:rw
+    depends_on:
+      - db
+    networks:
+      - family-net
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: family-web
+    restart: unless-stopped
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+    ports:
+      - "3003:3000"
+    environment:
+      API_URL: http://api:8000
+    depends_on:
+      - api
+    networks:
+      - family-net
+
+networks:
+  family-net:
+    driver: bridge
+
+volumes:
+  family-db-data:
