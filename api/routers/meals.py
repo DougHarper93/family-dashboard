@@ -33,6 +33,10 @@ def fetch_current_plan(conn):
         "SELECT * FROM weekly_plans WHERE week_start = ? ORDER BY created_at DESC LIMIT 1",
         (saturday.isoformat(),)
     ).fetchone()
+    if not row:
+        row = conn.execute(
+            "SELECT * FROM weekly_plans ORDER BY week_start DESC, created_at DESC LIMIT 1"
+        ).fetchone()
     return dict(row) if row else None
 
 
@@ -93,7 +97,7 @@ def current_week():
     try:
         plan = fetch_current_plan(conn)
         if not plan:
-            return {"plan": None, "meals": []}
+            return {"week_start": None, "meals": None}
 
         meals = {}
         for day in VALID_DAYS:

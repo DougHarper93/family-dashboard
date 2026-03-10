@@ -42,7 +42,7 @@ def list_events(member: Optional[str] = None, db: Session = Depends(get_db)):
 @router.get("/upcoming")
 def upcoming_events(db: Session = Depends(get_db)):
     rows = db.execute(text(
-        "SELECT * FROM events WHERE date >= CURRENT_DATE AND date <= CURRENT_DATE + INTERVAL '7 days' "
+        "SELECT * FROM events WHERE date >= CURRENT_DATE "
         "ORDER BY date ASC, time ASC NULLS LAST"
     )).fetchall()
     return [dict(r._mapping) for r in rows]
