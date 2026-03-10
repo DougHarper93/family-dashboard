@@ -36,6 +36,13 @@ family-dashboard/
 │   │   ├── meals.py        # Meal plan generation, re-roll, shopping list
 │   │   └── notifications.py# Push notification logic
 │   └── Dockerfile
+├── scraper/                # Recipe scraper — run once to populate recipes.db
+│   ├── scrape.py           # Entry point: python scrape.py
+│   ├── database.py         # SQLite schema + helpers
+│   ├── requirements.txt
+│   └── scrapers/
+│       ├── andy_cooks.py   # andy-cooks.com (dinner tag pages)
+│       └── recipe_tin_eats.py # recipetineats.com (sitemap)
 ├── web/                    # Next.js frontend
 │   ├── app/
 │   │   ├── page.tsx        # Main dashboard (events, bills, meals)
@@ -62,7 +69,25 @@ cp .env.example .env
 # Edit .env with your values
 ```
 
-### 2. Start everything
+### 2. Populate the recipe database
+
+The meal planner draws recipes from a local SQLite database. You need to run the scraper once before starting the app:
+
+```bash
+cd scraper
+python -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+
+python scrape.py             # scrape all sources (~30 mins, ~800 recipes)
+python scrape.py --limit 50  # quick test run (50 recipes per source)
+python scrape.py --andy      # Andy Cooks only
+python scrape.py --rte       # RecipeTin Eats only
+```
+
+This creates `scraper/recipes.db` which Docker mounts into the API container. You only need to run it once — re-run periodically to pick up new recipes.
+
+### 3. Start everything
 
 ```bash
 docker compose up -d

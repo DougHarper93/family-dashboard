@@ -31,7 +31,7 @@ services:
       NTFY_TOPIC: ${NTFY_TOPIC}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
     volumes:
-      - /home/doug/meal-planner/recipes.db:/app/data/recipes.db:rw
+      - ./scraper/recipes.db:/app/data/recipes.db:rw
     depends_on:
       - db
     networks:
